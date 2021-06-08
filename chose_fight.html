@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html onclick="playSong()">
+  <head>
+    <title>Fight</title>
+  
+    <style>
+
+        body {
+
+            background-color: black;
+        }
+
+        #scene {
+
+            
+            background-image: url("in234.png");
+        	width: 1000px;
+        	height: 563px;
+        	position: absolute;
+            top: 20px;
+            left: 20px;
+
+        }
+
+        #player {
+
+        	position: absolute;
+        	left: 20px;
+        	top: 120px;
+        }
+
+        #player2, #player3 {
+
+            position: absolute;
+            left: 600px;
+            top: 120px;
+            z-index: 1;
+
+        }
+
+        #playerDead {
+
+            position: absolute;
+            left: 0px;
+            top: 220px;
+
+        }
+
+
+        #playerWins {
+
+            position: absolute;
+            left: 20px;
+            top: 200px;
+
+        }
+
+        #playerHP {
+
+            position: absolute;
+            left: 115px;
+            top: 100px;
+            color: white;
+        	font-size: 30px;
+        	font-family: Adobe Garamond;
+
+        }
+
+        #zombie {
+
+        	position: absolute;
+        	left: 600px;
+        	top: 0px;
+        }
+
+        #zombie2, #zombie3 {
+
+          position: absolute;
+          left: 100px;
+          top: -40px;
+        }
+
+        #zombieDead {
+
+            position: absolute;
+            left: 420px;
+            top: 200px;
+        }
+
+        #zombieHP {
+
+            position: absolute;
+            left: 830px;
+            top: 25px;
+            color: white;
+        	font-size: 30px;
+        	font-family: Adobe Garamond;
+
+        }
+
+        #menu {
+
+        	position: absolute;
+        	left: 120px;
+        	top: 420px;
+        	width: 700px;
+        	height: 130px;
+        	background-color: rgba(0,0,100,.7);;
+        	border: 2px solid white;
+        	border-radius: 10px 10px;
+        	color: white;
+        	font-size: 22px;
+        	font-family: Adobe Garamond;
+            padding-left: 40px;
+
+        }
+
+        #message {
+            
+            position: absolute;
+            left: 400px;
+            top: 140px;
+            width: 200px;
+            height: 60px;
+            background-color: rgba(0,0,100,.7);;
+            border: 2px solid white;
+            border-radius: 10px 10px;
+            color: white;
+            font-size: 18px;
+            padding-left: 3px;
+            font-family: Adobe Garamond;
+            text-align: center;
+            padding-top: 30px;
+
+
+        }
+
+        p, ul, li {
+
+        	margin-top: 10px;
+        	margin-bottom: 10px;
+
+        }
+
+        li {
+
+        	list-style: none;
+        }
+
+        li:hover {
+
+        	text-decoration: underline;
+        	cursor: pointer;
+        }
+
+
+    </style>
+
+  </head>
+  <body>
+
+
+     <div id="scene">
+
+       <div id="playerHP">???/???</div>
+
+       <div id="zombieHP">???/???</div>
+
+       <img src="player.png" id="player">
+       <img src="player2.png" id="player2">
+       <img src="player3.png" id="player3">
+       <img src="playerDead.png" id="playerDead">
+       <img src="playerWins.png" id="playerWins">
+
+       <img src="zombie.png" id="zombie">
+       <img src="zombie2.png" id="zombie2">
+       <img src="zombie3.png" id="zombie3">
+       <img src="zombieDead.png" id="zombieDead">
+
+       <div id="message"></div>
+
+       <div id="menu">
+       
+    
+
+           <p>What will you do?</p>
+
+           <ul>
+               <li onclick="fight()">Fight</li>
+               <li onclick="run()">Run</li>
+
+           </ul>
+
+       </div>
+
+     </div>
+
+     <script>
+
+         var fighting = false;
+       
+         var playerHPMax = 50;
+         var playerHP = playerHPMax;
+         var playerHPDiv = document.getElementById('playerHP');         
+
+         var zombieHPMax = 100;
+         var zombieHP = zombieHPMax;
+         var zombieHPDiv = document.getElementById('zombieHP');
+
+         var playerImg = document.getElementById('player');
+         var player2Img = document.getElementById('player2');
+         var player3Img = document.getElementById('player3');
+         var playerDeadImg = document.getElementById('playerDead');
+         var playerWinsImg = document.getElementById('playerWins');
+
+         player2Img.style.display = 'none';
+         player3Img.style.display = 'none';
+         playerDeadImg.style.display = 'none';
+         playerWinsImg.style.display = 'none';
+
+         var zombieImg = document.getElementById('zombie'); 
+         var zombie2Img = document.getElementById('zombie2'); 
+         var zombie3Img = document.getElementById('zombie3');
+         var zombieDeadImg = document.getElementById('zombieDead'); 
+
+         zombie2Img.style.display = 'none';
+         zombie3Img.style.display = 'none';
+         zombieDeadImg.style.display = 'none';
+
+         var messageDiv = document.getElementById('message');
+         var menuDiv = document.getElementById('menu');
+
+         messageDiv.style.display = 'none';
+
+         var song = new Audio('fighting.mp3');
+         song.volume = .5;
+         var playerAttackSound = new Audio('playerAttack.mp3');
+         var zombieAttackSound = new Audio('zombieAttack.mp3');
+         var runsound = new Audio('run.mp3');
+         var victorySong = new Audio('fighting.mp3');
+
+         var songStarted = false;
+
+         function playSong(){
+
+              if (songStarted == true){
+
+                  return;
+              }
+
+              song.play();
+              songStarted = true;
+         }
+
+         function hideMenu(){
+
+             menuDiv.style.display = 'none';
+         }
+
+         function showMenu(){
+
+            if (playerHP == 0 || zombieHP == 0) {
+
+                  return;
+
+            }
+
+             menuDiv.style.display = '';
+         
+         }
+
+         function hideMessage(){
+
+             messageDiv.style.display = 'none';
+         }
+
+         function updateplayerHP() {
+
+             playerHPDiv.innerHTML = playerHP+'/'+playerHPMax;
+
+         }
+
+         function updatezombieHP() {
+         
+
+             zombieHPDiv.innerHTML = zombieHP+'/'+zombieHPMax;
+
+         }
+
+         
+         
+         function showplayer2(){
+                 
+             playerImg.style.display = 'none';
+
+             player2Img.style.display = '';
+
+
+
+         }
+
+         function showplayer3(){
+                 
+             player2Img.style.display = 'none';
+
+             player3Img.style.display = '';
+
+
+
+         }
+
+         function showplayer(){
+                 
+             player3Img.style.display = 'none';
+
+             playerImg.style.display = '';
+
+
+
+         }
+
+         function showplayerDead(){
+
+             playerImg.style.display = 'none';
+
+             playerDeadImg.style.display = '';
+         }
+
+         function goToLostPage(){
+
+             window.location.href = 'lost.html';
+         
+         }
+
+         function playerLoses(){
+
+
+             messageDiv.innerHTML = 'You have become a zombie!';
+
+             messageDiv.style.display = '';
+
+             setTimeout(goToLostPage, 2000);
+         }
+
+         function goToWonPage(){
+
+             window.location.href = 'won.html';
+         }
+
+
+         function playerWins(){
+
+             playerImg.style.display = 'none';
+
+             playerWinsImg.style.display = '';
+
+             messageDiv.innerHTML = 'You could save a girl!';
+
+             messageDiv.style.display = '';
+
+             song.pause();
+
+             victorySong.play();
+
+             setTimeout(goToWonPage, 10000);
+         }
+
+
+         function playerReturn(){
+
+             playerImg.style.left = '20px';
+
+             playerImg.style.opacity = 1;
+         }
+
+         function zombieReturn(){
+
+             zombieImg.style.left = '600px';
+
+             zombieImg.style.opacity = 1;
+         }
+
+         function zombieGetHit(){
+
+             var damage = 10 + Math.round(10 * Math.random());
+
+             if (Math.random() > .8 || playerHP < 20) {
+
+             	  damage = damage * 2;
+             };
+
+             zombieHP = zombieHP - damage;
+
+             if(zombieHP < 0){
+
+             	zombieHP = 0;
+             };
+
+             updatezombieHP();
+
+             zombieImg.style.left = '630px';
+
+             zombieImg.style.opacity = .5;
+
+             if (zombieHP > 0) {
+
+                setTimeout(zombieReturn, 200);
+             }
+
+             else{
+
+                showzombieDead();
+                setTimeout(playerWins, 700);
+             }
+
+             
+         }
+
+         function playplayerAttackSound(){
+
+         	 playerAttackSound.play();
+         }
+
+         function playerAttack(){
+
+             playerImg.style.left = '520px';
+
+             setTimeout(showplayer2, 150);
+             setTimeout(playplayerAttackSound, 200);
+             setTimeout(showplayer3, 250);
+             setTimeout(zombieGetHit, 450);
+             setTimeout(showplayer, 300);
+             setTimeout(playerReturn, 450);
+
+         }
+
+         function showzombie2(){
+
+             zombieImg.style.display = 'none';
+             zombie2Img.style.display = '';
+         }
+
+         function showzombie3(){
+
+             zombie2Img.style.display = 'none';
+             zombie3Img.style.display = '';
+         }
+
+         function showzombie(){
+
+             zombie3Img.style.display = 'none';
+             zombieImg.style.display = '';
+         }
+
+         function showzombieDead(){
+
+             zombieImg.style.display = 'none';
+
+             zombieDeadImg.style.display = '';
+         }
+
+
+         function playerGetHit(){
+
+         	 var damage = Math.round(30 * Math.random());
+
+         	 if(Math.random() < .3){
+
+         	 	  damage = 0;
+         	 }
+
+         	 playerHP = playerHP - damage;
+
+         	 if(playerHP < 0){
+
+         	 	playerHP = 0;
+         	 }
+
+         	 updateplayerHP();
+
+         	 playerImg.style.left = '0px';
+
+         	 playerImg.style.opacity = .5;
+
+             if (playerHP > 0) {
+
+                setTimeout(playerReturn, 200);
+             }
+
+             else{
+
+                showplayerDead();
+                setTimeout(playerLoses, 700);
+             }
+
+         	 
+
+         }
+
+         function playzombieAttackSound(){
+
+         	 zombieAttackSound.play();
+         }
+
+         function zombieAttack(){
+
+             if (zombieHP == 0){
+
+                return;
+             }
+
+             
+
+             zombieImg.style.left = '100px';
+
+             setTimeout(showzombie2, 200);
+
+             setTimeout(playzombieAttackSound, 300);
+
+             setTimeout(showzombie3, 500);
+
+             setTimeout(playerGetHit, 600);
+
+             setTimeout(showzombie, 800);
+
+             setTimeout(zombieReturn, 1000);
+         }
+
+         function zombieAttackFirst(){
+
+             if(fighting == true){
+
+                 setTimeout(zombieAttackFirst, 2000);
+
+                 return;
+             }
+
+             if (Math.random() > .8) {
+                  
+                  hideMenu();
+
+                  zombieAttack();
+
+                  setTimeout(showMenu, 1500);
+
+
+             }
+             
+             setTimeout(zombieAttackFirst, 2000);
+         }
+
+         function goToRanPage(){
+
+             window.location.href = 'ran.html'
+         }
+
+         function run(){
+
+             fighting = true;
+
+             if (Math.random() > .5){
+
+                playerImg.style.display = 'none';
+
+                runsound.play();
+
+                setTimeout(goToRanPage, 1000);
+
+             }
+
+             else{
+
+                hideMenu();
+
+                messageDiv.innerHTML = "There are zombies behind!";
+
+                messageDiv.style.display = '';
+
+                setTimeout(zombieAttack, 1000);
+
+                setTimeout(hideMessage, 2000);
+
+                setTimeout(showMenu, 2000);
+
+                setTimeout(stopfighting, 2000);
+             }
+             
+         }
+
+         function stopfighting(){
+
+             fighting = false;
+         }
+
+         function fight(){
+
+             fighting = true;
+
+             hideMenu();
+
+             playerAttack();
+
+             setTimeout(zombieAttack, 1000);
+
+             setTimeout(showMenu, 2000);
+
+             setTimeout(stopfighting, 2000);
+
+             
+         }
+
+         
+         updateplayerHP();
+         updatezombieHP();
+
+         setTimeout(zombieAttackFirst, 2000);
+
+
+     </script>
+
+  </body>
+</html>

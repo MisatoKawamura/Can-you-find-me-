@@ -1,56 +1,76 @@
-<!DOCTYPE html>
 
-<html onclick="playSong()">
+
+
 <html>
-
+    
     <head>
 
-    <title>Run</title>
+        <title>Run</title>
 
+    </head>
+
+
+    <body>
+
+
+        
+        <div id="scene">
+        
+           <a href="chose_fight.html" id="fight"> </a>
+
+           <p id="situation">The door won't open! You have no choice. <a href="chose_fight.html">FIGHT</a></p>
+
+        
+        </div>
 
         <style>
 
-        	body {
+          body {
 
-        		font-size: 18px;
-        		background-color: black;
-        		color: white;
-        		font-family: Adobe Garamond;
+            font-size: 18px;
+            background-color: black;
+            color: white;
+            font-family: Adobe Garamond;
 
-        	}
+          }
 
-        	h1 {
+          h1 {
 
-        		font-family: Adobe Garamond;
-        		font-size: 60px;
-        		padding: 0 0 0 0;
-        		margin: 0 0 0 0;
+            font-family: Adobe Garamond;
+            font-size: 60px;
+            padding: 0 0 0 0;
+            margin: 0 0 0 0;
                 color: red;
 
-        		position: absolute;
-        		left: 80px;
+            position: absolute;
+            left: 80px;
 
-        	}
+          }
 
-        	a {
+          a {
 
-        		color: red;
-        		text-decoration: none;
+            color: red;
+            text-decoration: none;
                 
-        	}
+          }
+
+          a:hover {
+
+                text-decoration: underline;
+            }
 
 
-        	#scene {
+          #scene {
 
-        		background: url("doornob.png") no-repeat;
-        		height: 400px;
-        		width: 711px;
+            background: url("z.png") no-repeat;
+            height: 400px;
+            width: 711px;
 
-        		position: absolute;
-        		top: 20px;
-        		left: 20px;
+            position: absolute;
+            top: 20px;
+            left: 20px;
 
-        	}
+          }
 
             #situation {
 
@@ -69,29 +89,11 @@
         
 
         </style>
-    </head>
-    <body>
 
 
-     <script>
-
-         var song = new Audio('doornob.mp3');
-         song.volume = .3;
-
-         var songStarted = false;
-
-         function playSong(){
-
-              if (songStarted == true){
-
-                  return;
-              }
-
-              song.play();
-              songStarted = true;
-         }
-
-
-     </script>
     </body>
+
+
+
 </html>
+
