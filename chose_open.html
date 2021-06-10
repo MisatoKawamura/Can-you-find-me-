@@ -25,6 +25,13 @@
 
            <p id="situation">It was too late. Go back to the <a href="index.html">ENTRANCE</a>.</p>
 
+           <audio controls src="ending.mp3">
+
+           </audio>
+
+           <input type="hidden" id="volume" value="0.3" min="0.0" max="1.0" step="0.1">
+        
+
         
         </div>
 
@@ -58,6 +65,13 @@
         		text-decoration: none;
                 
         	}
+
+            audio {
+
+                width: 273px;
+            }
+
+
 
 
         	#scene {
@@ -105,6 +119,23 @@
             }
 
         </style>
+
+        <script>
+            
+            var song = new Audio("ending.mp3");
+
+
+            function playSong(){
+
+                song.play();
+            }
+
+            
+
+
+
+        </script>
+
 
 
     </body>
